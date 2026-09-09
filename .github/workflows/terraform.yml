@@ -7,9 +7,9 @@
 name: AWS example workflow
 on:
   push
-# env:
-#   BUCKET_NAME : "nishad-demo-bucket01"
-#   AWS_REGION : "us-east1"
+env:
+  BUCKET_NAME : "nishad-demo-bucket01"
+  AWS_REGION : "us-east1"
 # permission can be added at job level or workflow level
 permissions:
   id-token: write   # This is required for requesting the JWT
@@ -25,6 +25,7 @@ jobs:
         with:
           role-to-assume: ROLE-TO-ASSUME
           role-session-name: oidc-github-role 
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
       - name: list buckets
