@@ -28,5 +28,4 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
       - name: list buckets
-        run:
-          aws s3 ls
+        run: aws s3 ls
