@@ -19,7 +19,6 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6.2.4
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
-          role-session-name: github-oidc-session
-          aws-region: us-east-2
+          aws-region: us-east-1
       - name: STS connection Test
         run: aws sts get-caller-identity
