@@ -1,31 +1,29 @@
-# Sample workflow to access AWS resources when workflow is tied to branch
-# The workflow creates a static website using Amazon S3
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
 name: AWS example workflow
+
 on:
-  push
+  push:
+
 env:
-  BUCKET_NAME : "nishad-demo-bucket01"
-  AWS_REGION : "us-east1"
-# permission can be added at job level or workflow level
+  BUCKET_NAME: "nishad-demo-bucket01"
+  AWS_REGION: "us-east-1"
+
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write   # Required for OIDC
+  contents: read    # Required for checkout
+
 jobs:
   S3PackageUpload:
     runs-on: ubuntu-latest
     steps:
       - name: Git clone the repository
-        uses: actions/checkout@v6
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secret.AWS_IAM_ROLE }}
-          role-session-name: oidc-github-role 
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          role-session-name: oidc-github-role
           aws-region: ${{ env.AWS_REGION }}
-      # Upload a file to AWS s3
-      - name: list buckets
+
+      - name: List buckets
         run: aws s3 ls
