@@ -92,25 +92,29 @@
 #       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
 #       run: terraform apply -auto-approve -input=false
 name: Github AWS OIDC
+
 on:
   push:
     branches: [main]
+
 permissions:
-  id-token: write
-  contents: read
+  id-token: write   # required for OIDC
+  contents: read    # required for actions/checkout
 
 jobs:
-
   oidc-test:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Sourse
+      - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Configure AWS Credential using OIDC
+
+      - name: Configure AWS Credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-
           aws-region: us-east-1
-          role-to-assume: &{{secrets.AWS_IAM_ROLE}}
-      - name: Test aws credentials
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+
+      - name: Test AWS credentials
         run: aws sts get-caller-identity
+
