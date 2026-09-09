@@ -2,7 +2,7 @@ name: AWS OIDC S3 List
 
 on:
   push:
-    branches: [main]
+    branches: [test]
 
 permissions:
   id-token: write   # Required for OIDC
