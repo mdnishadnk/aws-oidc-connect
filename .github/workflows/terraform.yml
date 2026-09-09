@@ -15,13 +15,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4   # latest stable
-
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v4   # stable release
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::712607540805:role/oidc-github-role #${{ secrets.AWS_IAM_ROLE }}    # full ARN stored in GitHub Secrets
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           role-session-name: github-oidc-session
           aws-region: us-east-1
 
-      - name: List S3 buckets
-        run: aws s3 ls
+
+      - name: STS connection Test
+        run: aws sts get-caller-identity
