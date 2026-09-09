@@ -1,5 +1,6 @@
 name: AWS OIDC S3 List
-
+env:
+  AWS_SKIP_CLEANUP_STEP: "true"
 on:
   push:
     branches: [main]
@@ -17,9 +18,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          role-to-assume: arn:aws:iam::712607540805:role/oidc-github-role
           role-session-name: github-oidc-session
           aws-region: us-east-1
 
