@@ -91,7 +91,7 @@
 #     - name: Terraform Apply
 #       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
 #       run: terraform apply -auto-approve -input=false
-name: Github AWS OIDCs
+name: Github AWS OIDC
 on:
   push:
     branches: [main]
@@ -104,9 +104,10 @@ jobs:
   oidc-test:
     runs-on: [ubuntu-latest]
     steps:
-      - name: Checkout sourse
+      - name: Checkout Sourse
         uses: actions/checkout@v4
       - name: Configure AWS Credential using OIDC
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
 
           aws-region: us-east-1
