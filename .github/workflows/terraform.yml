@@ -1,25 +1,27 @@
-name: AWS-OIDC-test
+name: AWS OIDC S3 List
+
 on:
-  push
-env:
-  BUCKET_NAME : "nishad-demo-bucket01"
-  AWS_REGION : "us-east1"
-# permission can be added at job level or workflow level
+  push:
+    branches: [main]
+
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write   # Required for OIDC
+  contents: read    # Required for checkout
+
 jobs:
-  S3PackageUpload:
+  list-s3-buckets:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Git clone the repository
+      - name: Checkout repository
         uses: actions/checkout@v6
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
-          role-session-name: oidc-github-role 
-          aws-region: ${{ env.AWS_REGION }}
-      # Upload a file to AWS s3
-      - name: list buckets
+          role-session-name: github-oidc-session
+          aws-region: us-east-1
+
+      - name: List S3 buckets
         run: aws s3 ls
