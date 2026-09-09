@@ -1,5 +1,4 @@
-
-#       run: terraform apply -auto-approve -input=false
+# oidc test
 name: Github AWS OIDC
 
 on:
@@ -16,16 +15,14 @@ jobs:
 
     steps:
       - name: Checkout Source
-        uses: actions/checkout@v6
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ROLE-TO-ASSUME
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           role-session-name: oidc-github-role
           aws-region: us-east-1
-          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
 
       - name: Test AWS credentials
         run: aws sts get-caller-identity
-
-
